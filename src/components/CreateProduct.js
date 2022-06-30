@@ -1,45 +1,62 @@
-import { Typograph, Box, Typography, TextField, Button } from "@mui/material";
+import { Box, Typography, TextField, Button } from "@mui/material";
 import { Container } from "@mui/system";
+import { Link, Routes, Route } from "react-router-dom";
+import Home from "./Home";
 
-function CreateProduct
-() {
-
+function CreateProduct({ currentProduct, setCurrentProduct, addProduct, products }) {
+  
   return (
     <>
-      <form>
+      <Box component="form" noValidate onSubmit={addProduct} >
         <Container>
           <Typography>New Product to Sell</Typography>
         </Container>
-        <Container>
+        <Container sx={{m: 1}}>
           <Box>
-            <Typography>What are you selling?</Typography>
-            <TextField />
+            <TextField 
+              value={currentProduct.item}
+              label='Item'
+              onChange={event => setCurrentProduct({...currentProduct, item: event.target.value })}
+            />
           </Box>
         </Container>
-        <Container>
+        <Container sx={{m: 1}}>
           <Box>
-            <Typography>Price</Typography>
-            <TextField />
+            <TextField 
+              value={currentProduct.price}
+              label='Price'
+              onChange={event => setCurrentProduct({...currentProduct, price: event.target.value })}
+            />
           </Box>
         </Container>
-        <Container>
+        <Container sx={{m: 1}}>
           <Box>
-            <Typography>Images</Typography>
-            <TextField />
+            <TextField 
+              value={currentProduct.image}
+              label='Image'
+              onChange={event => setCurrentProduct({...currentProduct, image: event.target.value })}
+            />
           </Box>
         </Container>
-        <Container>
+        <Container sx={{m: 1}}>
           <Box>
-            <Typography>Description</Typography>
-            <TextField />
+            <TextField 
+              value={currentProduct.description}
+              label='Description'
+              onChange={event => setCurrentProduct({...currentProduct, description: event.target.value })}
+            />
           </Box>
         </Container>
-        <Button>Add Item</Button>
-      </form>
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{m: 1}}
+          >Add Item</Button>
+
+      </Box>
     </>
 
   );
 }
 
-export default CreateProduct
-;
+export default CreateProduct;

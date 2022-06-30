@@ -59,7 +59,7 @@ const ResponsiveAppBar = () => {
                 textDecoration: 'none',
               }}
             >
-              <Link to='/'>MarketPlace</Link>
+              MarketPlace
             </Typography>
 
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -103,7 +103,7 @@ const ResponsiveAppBar = () => {
               variant="h5"
               noWrap
               component="a"
-              href=""
+              href="/"
               sx={{
                 mr: 2,
                 display: { xs: 'flex', md: 'none' },
@@ -115,7 +115,7 @@ const ResponsiveAppBar = () => {
                 textDecoration: 'none',
               }}
             >
-               <Link to='/'>MarketPlace</Link>
+              MarketPlace
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {pages.map((page) => (
@@ -132,7 +132,7 @@ const ResponsiveAppBar = () => {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  <Avatar alt="Remy Sharp" src="" />
                 </IconButton>
               </Tooltip>
               <Menu
@@ -154,19 +154,16 @@ const ResponsiveAppBar = () => {
                 {settings.map((setting) => (
                   <MenuItem key={setting} onClick={handleCloseUserMenu}>
                     <Typography textAlign="center">{setting}</Typography>
-                    <Typography textAlign="center"><Link to='/product'>Sell Item</Link></Typography>
+                    <Typography textAlign="center" ></Typography>
                   </MenuItem>
                 ))}
-                
+                <Link to='/product'>Sell Item</Link>
               </Menu>
             </Box>
           </Toolbar>
         </Container>
       </AppBar>
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/products' element={<CreateProduct />} />
-      </Routes>
+     
     </>
   );
 };
