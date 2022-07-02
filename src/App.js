@@ -22,7 +22,6 @@ function App() {
   const [selectedProduct, setSelectedProduct] = useState('')
   const [cart, setCart] = useState('')
   const [purchases, setPurchases] = useState('')
-  const [edit, setEdit] = useState('')
 
   const navigate = useNavigate()
 
@@ -145,24 +144,27 @@ function App() {
     navigate('/product-edit')
   }
 
-  function editChange() {
-    selectedProduct(selectedProduct)
-  }
+  // function editChange() {
+  //   selectedProduct(selectedProduct)
+  // }
 
   function editProduct(event) {
     event.preventDefault();
-    if(edit !== null) {
+    console.log(selectedProduct)
+    console.log('clicked')
+    if(selectedProduct !== null) {
       fetch('/api/edit', {
         method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(selectedProduct)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(selectedProduct),
       })
         .then(res => res.json())
         .then(product => {
-          setSelectedProduct([product])
+          console.log('yes')
+          // setSelectedProduct(product)
         })
     }
-    // navigate('/')
+    // navigate('/sales')
   }
 
   return (
@@ -198,7 +200,7 @@ function App() {
         <Route path='/product-edit' element={<Edit 
           selectedProduct={selectedProduct}
           editProduct={editProduct}
-          editChange={editChange}
+          setSelectedProduct={setSelectedProduct}
         />} />
       </Routes>
 
