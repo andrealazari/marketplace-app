@@ -96,6 +96,8 @@ const ResponsiveAppBar = () => {
                     <Typography textAlign="center">{page}</Typography>
                   </MenuItem>
                 ))}
+                
+                  
               </Menu>
             </Box>
             <StoreIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -158,6 +160,10 @@ const ResponsiveAppBar = () => {
                   </MenuItem>
                 ))}
                 <Link to='/product'>Sell Item</Link>
+                <Link to='/purchases'>My Purchases</Link>
+                <Link to='/cart'>My Cart</Link>
+                <Link to='/product-info'>Product Info</Link>
+                <Link to='/sales'>My Items to Sell</Link>
               </Menu>
             </Box>
           </Toolbar>

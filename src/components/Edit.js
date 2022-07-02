@@ -1,13 +1,15 @@
 import { Box, Typography, TextField, Button, CardContent, CardActions, Card, Grid, Container } from "@mui/material";
 import {Routes, Route, Link, useNavigate} from 'react-router-dom'
 
-function ProductInfo({selectedProduct, addToCart}) {
+function Edit({selectedProduct, editProduct, editChange}) {
   return(
     <>
       <Container>
-      <Typography component='h2' variant='h5'>
-          {selectedProduct.item}
-        </Typography>
+        <TextField  
+          placeholder={selectedProduct.item}
+          // value={selectedProduct.item}
+          />
+          
         <Typography component='h2' variant='h5'>
           {selectedProduct.price}
         </Typography>
@@ -19,14 +21,14 @@ function ProductInfo({selectedProduct, addToCart}) {
         <Button
           type="submit"
           variant="contained"
-          onClick={addToCart}
-        >Add to Cart</Button>
-        <Link to="/">
+          onChange={editChange}
+        >Edit</Button>
+        <Link to="prduct-edit">
           <Button 
             variant="contained"
             size='small'
             >
-            Keep Browsing
+            Go Back
           </Button>
         </Link>
       </Container>
@@ -34,4 +36,4 @@ function ProductInfo({selectedProduct, addToCart}) {
   )
 }
 
-export default ProductInfo
+export default Edit

@@ -1,7 +1,7 @@
 import { Box, Typography, TextField, Button, CardContent, CardActions, Card, Grid, Container } from "@mui/material";
 import {Routes, Route, Link, useNavigate} from 'react-router-dom'
 
-function Cart({cart, buyProducts}) {
+function Cart({cart, buyProducts, deleteFromCart}) {
   const productList = cart.map((product, index) => 
   <Card key={index}>
     <CardContent>
@@ -16,6 +16,8 @@ function Cart({cart, buyProducts}) {
         <Button 
           variant="contained"
           size='small'
+          onClick={deleteFromCart}
+          id={product.item + '-' + product.price + '-' + product.description + '-' + product.id + '-' + product.image}
           >
           Delete From Cart
         </Button>
@@ -30,12 +32,15 @@ function Cart({cart, buyProducts}) {
         {productList}
         </Typography>
      </Container>
-     <Button 
-      variant="contained"
-      size='small'
-      >
-      Keep Browsing
-    </Button>
+     <Link to="/">
+      <Button 
+        variant="contained"
+        size='small'
+        >
+        Keep Browsing
+      </Button>
+     </Link>
+     
     <Button 
       variant="contained"
       size='small'

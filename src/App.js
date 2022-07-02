@@ -6,6 +6,8 @@ import CreateProduct from './components/CreateProduct';
 import ProductInfo from './components/ProductInfo';
 import Cart from './components/Cart';
 import Purchases from './components/Purchases'
+import Sales from './components/Sales'
+import Edit from './components/Edit';
 
 import {Routes, Route, Link, useNavigate} from 'react-router-dom'
 
@@ -20,6 +22,7 @@ function App() {
   const [selectedProduct, setSelectedProduct] = useState('')
   const [cart, setCart] = useState('')
   const [purchases, setPurchases] = useState('')
+  const [edit, setEdit] = useState('')
 
   const navigate = useNavigate()
 
@@ -58,7 +61,6 @@ function App() {
       item_id: productArray[3],
       image: productArray[4]  
     }
-    console.log(productObj)
     setSelectedProduct(productObj)
     navigate('/product-info')
   }
@@ -111,6 +113,58 @@ function App() {
 
   useEffect(getPurchasesInfo, [])
 
+  function deleteFromCart(event) {
+    event.preventDefault();
+    const productArray = event.target.id.split('-')
+    const productObj = {
+      item_id: productArray[3],
+    }
+    console.log(productObj)
+    fetch(`/api/cart/${productObj.item_id}`, {
+      method: 'DELETE'
+    }).then(() => {
+      console.log(cart)
+      const newCart = cart.filter((product) => product.id !== productObj.item_id)
+      setCart(newCart)
+    });
+  }
+
+  function selectedProductEdit(event) {
+    event.preventDefault();
+    const productArray = event.target.id.split('-')
+    console.log(event.target)
+    const productObj = {
+      item: productArray[0],
+      price: productArray[1],
+      description: productArray[2],
+      item_id: productArray[3],
+      image: productArray[4]  
+    }
+    console.log(selectedProduct)
+    setSelectedProduct(productObj)
+    navigate('/product-edit')
+  }
+
+  function editChange() {
+    selectedProduct(selectedProduct)
+  }
+
+  function editProduct(event) {
+    event.preventDefault();
+    if(edit !== null) {
+      fetch('/api/edit', {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(selectedProduct)
+      })
+        .then(res => res.json())
+        .then(product => {
+          setSelectedProduct([product])
+        })
+    }
+    // navigate('/')
+  }
+
   return (
     <div className="App">
       <Navbar />
@@ -132,9 +186,19 @@ function App() {
         <Route path='/cart' element={<Cart 
           cart={cart}
           buyProducts={buyProducts}
+          deleteFromCart={deleteFromCart}
         />} />
         <Route path='/purchases' element={<Purchases 
           purchases={purchases}
+        />} />
+        <Route path='/sales' element={<Sales 
+          selectedProductEdit={selectedProductEdit}
+          products={products}
+        />} />
+        <Route path='/product-edit' element={<Edit 
+          selectedProduct={selectedProduct}
+          editProduct={editProduct}
+          editChange={editChange}
         />} />
       </Routes>
 
