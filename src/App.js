@@ -8,6 +8,7 @@ import Cart from './components/Cart';
 import Purchases from './components/Purchases'
 import Sales from './components/Sales'
 import Edit from './components/Edit';
+import SignUp from './components/SignUp';
 
 import {Routes, Route, Link, useNavigate} from 'react-router-dom'
 
@@ -22,6 +23,7 @@ function App() {
   const [selectedProduct, setSelectedProduct] = useState('')
   const [cart, setCart] = useState('')
   const [purchases, setPurchases] = useState('')
+  const [user,setUser] = useState('')
 
   const navigate = useNavigate()
 
@@ -144,10 +146,6 @@ function App() {
     navigate('/product-edit')
   }
 
-  // function editChange() {
-  //   selectedProduct(selectedProduct)
-  // }
-
   function editProduct(event) {
     event.preventDefault();
     console.log(selectedProduct)
@@ -165,6 +163,41 @@ function App() {
         })
     }
     // navigate('/sales')
+  }
+
+
+  function deleteFromSales(event) {
+    event.preventDefault();
+    const productArray = event.target.id.split('-')
+    const productObj = {
+      item_id: productArray[3],
+    }
+    console.log(productObj)
+    fetch(`/api/sales/${productObj.item_id}`, {
+      method: 'DELETE'
+    }).then(() => {
+      const newList= products.filter((product) => product.id !== productObj.item_id)
+      setProducts(newList)
+    });
+    navigate('/sales')
+  }
+
+  function submitSignUp(event) {
+    event.preventDefault();
+    console.log(user)
+    console.log('hey')
+    if(user !== null) {
+      fetch('/api/users', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(user)
+      })
+        .then(res => res.json())
+        .then(user => {
+          setUser(user)
+        })
+    }
+    navigate('/')
   }
 
   return (
@@ -196,12 +229,19 @@ function App() {
         <Route path='/sales' element={<Sales 
           selectedProductEdit={selectedProductEdit}
           products={products}
+          deleteFromSales={deleteFromSales}
         />} />
         <Route path='/product-edit' element={<Edit 
           selectedProduct={selectedProduct}
           editProduct={editProduct}
           setSelectedProduct={setSelectedProduct}
         />} />
+
+      <Route path='/signup' element=    {<SignUp 
+        user={user}
+        setUser={setUser}
+        submitSignUp={submitSignUp}
+        />} />  
       </Routes>
 
     </div>

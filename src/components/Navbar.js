@@ -164,6 +164,7 @@ const ResponsiveAppBar = () => {
                 <Link to='/cart'>My Cart</Link>
                 <Link to='/product-info'>Product Info</Link>
                 <Link to='/sales'>My Items to Sell</Link>
+                <Link to='/signup'>SignUp</Link>
               </Menu>
             </Box>
           </Toolbar>

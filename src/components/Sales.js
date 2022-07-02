@@ -2,7 +2,7 @@ import { Box, Typography, TextField, Button, CardContent, CardActions, Card, Gri
 import { Container } from "@mui/system";
 import {Routes, Route, Link} from 'react-router-dom'
 
-function Sales({products, selectedProductEdit}) {
+function Sales({products, selectedProductEdit, deleteFromSales}) {
   const productList = products.map((product, index) => 
     <Card key={index}>
       <CardContent>
@@ -32,7 +32,7 @@ function Sales({products, selectedProductEdit}) {
           <Button 
             variant="contained"
             size='small'
-            
+            onClick={deleteFromSales}
             id={product.item + '-' + product.price + '-' + product.description + '-' + product.id + '-' + product.image}
             >
             Delete
