@@ -8,18 +8,15 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import StoreIcon from '@mui/icons-material/Store';
 import {Routes, Route, Link} from 'react-router-dom'
-import CreateProduct from './CreateProduct';
-import Home from './Home';
 
 const pages = ['Products'];
 const settings = ['Profile', 'Purchases', 'Dashboard', 'Logout'];
 
-const ResponsiveAppBar = () => {
+const ResponsiveAppBar = ({logOut}) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -40,11 +37,11 @@ const ResponsiveAppBar = () => {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <StoreIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-            <Typography
+            <Link to='/' style={{ textDecoration: 'none', color: 'white' }}><Typography
               variant="h6"
               noWrap
               component="a"
@@ -60,7 +57,7 @@ const ResponsiveAppBar = () => {
               }}
             >
               MarketPlace
-            </Typography>
+            </Typography></Link>
 
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
               <IconButton
@@ -90,22 +87,21 @@ const ResponsiveAppBar = () => {
                 sx={{
                   display: { xs: 'block', md: 'none' },
                 }}
-              >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
-                  </MenuItem>
-                ))}
                 
-                  
+              >
+                <MenuItem onClick={handleCloseNavMenu}><Link style={{ textDecoration: 'none' }} to='/product'>Sell Item</Link></MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}><Link style={{ textDecoration: 'none' }} to='/purchases'>My Purchases</Link></MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}><Link style={{ textDecoration: 'none' }} to='/cart'>My Cart</Link></MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}><Link style={{ textDecoration: 'none' }} to='/sales'>My Items to Sell</Link></MenuItem>
+                
+                
               </Menu>
             </Box>
             <StoreIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-            <Typography
+            <Link to='/' style={{ textDecoration: 'none', color: 'white' }}><Typography
               variant="h5"
               noWrap
               component="a"
-              href="/"
               sx={{
                 mr: 2,
                 display: { xs: 'flex', md: 'none' },
@@ -118,17 +114,13 @@ const ResponsiveAppBar = () => {
               }}
             >
               MarketPlace
-            </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) => (
-                <Button
-                  key={page}
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  {page}
-                </Button>
-              ))}
+            </Typography></Link>
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex'}}}>
+                <MenuItem onClick={handleCloseNavMenu}><Link style={{ textDecoration: 'none', color: 'white' }} to='/product'>Sell Item</Link></MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}><Link style={{ textDecoration: 'none', color: 'white' }} to='/purchases'>My Purchases</Link></MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}><Link style={{ textDecoration: 'none', color: 'white' }} to='/cart'>My Cart</Link></MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}><Link style={{ textDecoration: 'none', color: 'white' }} to='/sales'>My Items to Sell</Link></MenuItem>
+
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>
@@ -153,18 +145,15 @@ const ResponsiveAppBar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                    <Typography textAlign="center" ></Typography>
-                  </MenuItem>
-                ))}
-                <Link to='/product'>Sell Item</Link>
-                <Link to='/purchases'>My Purchases</Link>
-                <Link to='/cart'>My Cart</Link>
-                <Link to='/product-info'>Product Info</Link>
-                <Link to='/sales'>My Items to Sell</Link>
-                <Link to='/signup'>SignUp</Link>
+                {/* <MenuItem onClick={handleCloseUserMenu}><Link style={{ textDecoration: 'none' }} to='/product'>Sell Item</Link></MenuItem>
+                <MenuItem onClick={handleCloseUserMenu}><Link style={{ textDecoration: 'none' }} to='/purchases'>My Purchases</Link></MenuItem>
+                <MenuItem onClick={handleCloseUserMenu}><Link style={{ textDecoration: 'none' }} to='/cart'>My Cart</Link></MenuItem>
+                <MenuItem onClick={handleCloseUserMenu}><Link style={{ textDecoration: 'none' }} to='/product-info'>Product Info</Link></MenuItem>
+                <MenuItem onClick={handleCloseUserMenu}><Link style={{ textDecoration: 'none' }} to='/sales'>My Items to Sell</Link></MenuItem> */}
+                <MenuItem onClick={handleCloseUserMenu}><Link style={{ textDecoration: 'none' }} to='/signup'>SignUp</Link></MenuItem>
+                <MenuItem onClick={handleCloseUserMenu}><Link style={{ textDecoration: 'none' }} to='/login'>Login</Link></MenuItem>
+                <MenuItem onClick={handleCloseUserMenu}><Link style={{ textDecoration: 'none' }} to='/' onClick={logOut}>Logout</Link></MenuItem>
+
               </Menu>
             </Box>
           </Toolbar>
