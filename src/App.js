@@ -11,7 +11,7 @@ import Edit from './components/Edit';
 import SignUp from './components/SignUp';
 import Login from './components/Login'
 
-import {Routes, Route, useNavigate} from 'react-router-dom'
+import {Routes, Route} from 'react-router-dom'
 
 function App() {
   const [products, setProducts] = useState([])
@@ -29,8 +29,6 @@ function App() {
   const [login, setLogin] = useState('')
   const [loggedIn, setLoggedIn] = useState({})
   const [isLogged, setIsLogged] = useState(false)
-
-  const navigate = useNavigate()
 
   function getProducts() {
     fetch('/api/products')
@@ -67,18 +65,7 @@ function App() {
     });
   }
 
-  function sortPrice(a, b) {
-    const priceA = a.price;
-    const priceB = b.price;
   
-    let comparison = 0;
-    if (priceA > priceB) {
-      comparison = 1;
-    } else if (priceA < priceB) {
-      comparison = -1;
-    }
-    return comparison;
-  }
 
   function sortName(a, b) {
     const itemA = a.item;
@@ -100,12 +87,10 @@ function App() {
         logOut={logOut}
         loggedIn={loggedIn}
       />
-      <h1>Hi {loggedIn.userName}</h1>
        <Routes>
         <Route path='/' element={<Home 
           products={products}
           login={login}
-          sortPrice={sortPrice}
           sortName={sortName}
           setSelectedProduct={setSelectedProduct}
           loggedIn={loggedIn}

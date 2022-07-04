@@ -145,8 +145,6 @@ const ResponsiveAppBar = ({logOut, loggedIn}) => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                <MenuItem onClick={handleCloseUserMenu}><Link style={{ textDecoration: 'none' }} to='/signup'>SignUp</Link></MenuItem>
-                <MenuItem onClick={handleCloseUserMenu}><Link style={{ textDecoration: 'none' }} to='/login'>Login</Link></MenuItem>
                 <MenuItem onClick={handleCloseUserMenu}><Link style={{ textDecoration: 'none' }} to='/' onClick={logOut}>Logout</Link></MenuItem>
               </Menu>
             </Box>
