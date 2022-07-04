@@ -13,9 +13,24 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Card from '@mui/material/Card';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {Routes, Route, useNavigate} from 'react-router-dom'
 
 
-export default function SignUp({user, setUser, submitSignUp}) {
+export default function SignUp({user, setUser}) {
+
+  const navigate = useNavigate()
+
+  function submitSignUp(event) {
+    event.preventDefault();
+    fetch('/api/users', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(user)
+    })
+      .then(res => res.json())
+
+    navigate('/login')
+  }
 
   return (
     <Box maxWidth="md"

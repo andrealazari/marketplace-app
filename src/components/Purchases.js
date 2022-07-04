@@ -1,10 +1,10 @@
 import { Box, Typography, TextField, Button, CardContent, CardActions, Card, Grid, Container, CardMedia } from "@mui/material";
 import {Routes, Route, Link, useNavigate} from 'react-router-dom'
 
-function Purchases({purchases}) {
-  const productList = purchases.map((product, index) => 
+function Purchases({purchases, loggedIn}) {
+  const productList = purchases.filter(p => p.userid != loggedIn.userId).map((product, index) => 
    <>
-    <Grid item xs={12} sm={6} md={4}>
+    <Grid item xs={12} sm={6} md={4} key={index}>
       <Card sx={{p: 2}}>
        <Typography component='h2' variant='h5' sx={{p: 2}}>
            {product.item}

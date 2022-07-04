@@ -1,21 +1,69 @@
 import { Box, Typography, CardMedia, Button, CardContent, CardActions, Card, Grid, Container } from "@mui/material";
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
-function Cart({cart, buyProducts, deleteFromCart}) {
-  const price = cart.reduce((total, product) => total + Number(product.price), 0)
+function Cart({cart, buyProducts, deleteFromCart, setCart, purchases, setPurchases}) {
 
-  const productList = cart.map((product, index) => 
+  const navigate = useNavigate()
+
+  function buyProducts(event) {
+    event.preventDefault();
+    const productArray = event.target.id.split('|')
+    const productObj = {
+      item_id: productArray[3],
+    }
+    if(purchases !== null) {
+      fetch('/api/purchases', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(cart)
+      })
+        .then(res => res.json())
+        .then(product => {
+          setPurchases([...purchases, product])
+        })
+    }
+    fetch(`/api/carts/${productObj.item_id}`, {
+      method: 'DELETE'
+    })
+      .then(() => {
+        const newCart = cart.filter((product) => product.id != productObj.item_id)
+        setCart(newCart)
+      });
+    navigate('/purchases')
+  }
+
+  function deleteFromCart(event) {
+    event.preventDefault();
+    const productArray = event.target.id.split('|')
+    const productObj = {
+      item_id: productArray[3],
+    }
+    fetch(`/api/cart/${productObj.item_id}`, {
+      method: 'DELETE'
+    })
+      .then(() => {
+      const newCart = cart.filter((product) => product.id != productObj.item_id)
+      setCart(newCart)
+    });
+  }
+  
+  let price
+  let productList
+  if(cart !== '') {
+    price = cart.reduce((total, product) => total + Number(product.price), 0)
+
+    productList = cart.map((product, index) => 
     <Card key={index} sx={{m: 1}}>
       <Box display='flex'> 
         <CardMedia 
-          sx={{pt: '10%'}}
+          sx={{pt: '56%', height: 0}}
           image={product.image}/>
         <CardActions>
         <Button 
           variant="contained"
           size='small'
           onClick={deleteFromCart}
-          id={product.item + '-' + product.price + '-' + product.description + '-' + product.id + '-' + product.image}
+          id={product.item + '|' + product.price + '|' + product.description + '|' + product.id + '|' + product.image}
           >
           Delete From Cart
         </Button>
@@ -33,7 +81,12 @@ function Cart({cart, buyProducts, deleteFromCart}) {
       </CardContent>
     </Box>  
   </Card>
-)
+  )
+  }else {
+    price = 0
+    productList = ''
+  }
+  
 
   return(
     <>

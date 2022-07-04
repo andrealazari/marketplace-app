@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -12,9 +10,36 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Card from '@mui/material/Card';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {useNavigate} from 'react-router-dom'
 
-export default function SignIn({login, setLogin, submitLogin}) {
+export default function SignIn({login, setLogin, submitLogin, setLoggedIn, setIsLogged}) {
+
+  const navigate = useNavigate()
+  let errorMessage
+
+  function submitLogin(event) {
+    event.preventDefault();
+    fetch('/api/sessions', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(login)
+    })
+      .then(res => res.json())
+      .then(user => {
+        if(user.error) {
+          errorMessage = <Typography component="h1" variant="h5">
+          Please provide correct login information
+          </Typography>
+          navigate('/login')
+        } else {
+          setLoggedIn(user)
+          setIsLogged(true)
+          navigate('/')
+        }
+        
+      })
+  }
+
 
   return (
 
@@ -33,7 +58,7 @@ export default function SignIn({login, setLogin, submitLogin}) {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Login
           </Typography>
           <Box component="form" onSubmit={submitLogin} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -66,14 +91,15 @@ export default function SignIn({login, setLogin, submitLogin}) {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+
             >
-              Sign In
+              Login
             </Button>
             <Grid container>
 
               <Grid item>
                 <Link to='/signup' variant="body2">
-                  {"Don't have an account? Sign Up"}
+                  Don't have an account? Sign Up
                 </Link>
               </Grid>
             </Grid>

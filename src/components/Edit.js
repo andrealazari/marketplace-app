@@ -1,7 +1,34 @@
 import { Box, Typography, TextField, Button, CardContent, CardActions, Card, Grid, Container } from "@mui/material";
 import {Routes, Route, Link, useNavigate} from 'react-router-dom'
 
-function Edit({selectedProduct, editProduct, editChange, setSelectedProduct}) {
+function Edit({selectedProduct, editProduct, products, setSelectedProduct, setProducts}) {
+
+  const navigate = useNavigate()
+
+  function editProduct(event) {
+    event.preventDefault();
+    
+    if(selectedProduct !== null) {
+      fetch('/api/edit', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(selectedProduct),
+      })
+        .then(res => res.json())
+        .then(p => {  
+          products.map((product, index) => {
+            if(product.id === p.id) {
+              const productIndex = products.indexOf(product)
+              const newProducts = [...products]
+              newProducts[productIndex] = p
+              setProducts(newProducts)
+            }
+          })  
+        })  
+    }
+    navigate('/sales')
+  }
+
   return(
     <>
       <Container maxWidth='sm'>
@@ -42,7 +69,6 @@ function Edit({selectedProduct, editProduct, editChange, setSelectedProduct}) {
               sx={{mt:3}}
               type="submit"
               variant="contained"
-              // onClick={editProduct}
             >Edit</Button>
             <Link to="/sales" style={{ textDecoration: 'none' }}>
               <Button 

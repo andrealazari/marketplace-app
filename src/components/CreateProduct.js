@@ -1,6 +1,26 @@
 import { Box, Typography, TextField, Button, Container, Card } from "@mui/material";
+import {useNavigate} from 'react-router-dom'
 
-function CreateProduct({ currentProduct, setCurrentProduct, addProduct, products, login }) {
+function CreateProduct({ currentProduct, setCurrentProduct, addProduct, loggedIn, products, setProducts}) {
+
+  const navigate = useNavigate()
+
+  function addProduct(event) {
+    event.preventDefault();
+
+    fetch('/api/products', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({...currentProduct, userid: loggedIn.userId})
+    })
+      .then(res => res.json())
+      .then(product => {
+        setProducts([...products, product])
+        setCurrentProduct({})
+        navigate('/sales')
+      })
+  }
+
   return (
     <>
       <Box component="form" noValidate onSubmit={addProduct} >

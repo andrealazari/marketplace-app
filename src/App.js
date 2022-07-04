@@ -11,7 +11,7 @@ import Edit from './components/Edit';
 import SignUp from './components/SignUp';
 import Login from './components/Login'
 
-import {Routes, Route, Link, useNavigate} from 'react-router-dom'
+import {Routes, Route, useNavigate} from 'react-router-dom'
 
 function App() {
   const [products, setProducts] = useState([])
@@ -20,45 +20,52 @@ function App() {
     price: '', 
     image: '', 
     description: '',
-    user_id: ''
+    userid: ''
   })
   const [selectedProduct, setSelectedProduct] = useState('')
-  const [cart, setCart] = useState('')
-  const [purchases, setPurchases] = useState('')
+  const [cart, setCart] = useState([])
+  const [purchases, setPurchases] = useState([])
   const [user, setUser] = useState('')
   const [login, setLogin] = useState('')
+  const [loggedIn, setLoggedIn] = useState({})
   const [isLogged, setIsLogged] = useState(false)
 
   const navigate = useNavigate()
-
-  function addProduct(event) {
-    event.preventDefault();
-    setCurrentProduct({...currentProduct, user_id: login.userId })
-    console.log(currentProduct)
-    if(currentProduct !== null) {
-      fetch('/api/products', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(currentProduct)
-      })
-        .then(res => res.json())
-        .then(product => {
-          setProducts([...products, product])
-        })
-    }
-    navigate('/')
-  }
 
   function getProducts() {
     fetch('/api/products')
       .then(res => res.json())
       .then(res => {
-        setProducts([...products, ...res])
+        setProducts([ ...res])
       })
     }
-
-
   useEffect(getProducts, [])
+
+  function getCartInfo() {
+    fetch('/api/cart')
+      .then(res => res.json())
+      .then(res => setCart([...cart, ...res]))
+  }
+  useEffect(getCartInfo, [])
+
+  function getPurchasesInfo() {
+    fetch('/api/purchases')
+      .then(res => res.json())
+      .then(res => setPurchases([...res]))
+  }
+  useEffect(getPurchasesInfo, [])
+
+  function logOut() {
+    fetch("/api/sessions", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(),
+    }).then((req, res) => {
+      const logout = '';
+      setLoggedIn({})
+      setIsLogged(false)
+    });
+  }
 
   function sortPrice(a, b) {
     const priceA = a.price;
@@ -85,241 +92,75 @@ function App() {
     }
     return comparison;
   }
-  
 
-  function selectedProductChange(event) {
-    event.preventDefault();
-    const productArray = event.target.id.split('-')
-    console.log(event.target)
-    const productObj = {
-      item: productArray[0],
-      price: productArray[1],
-      description: productArray[2],
-      item_id: productArray[3],
-      image: productArray[4]  
-    }
-    setSelectedProduct(productObj)
-    navigate('/product-info')
-    console.log(products)
-  }
-
-  function addToCart(event) {
-    event.preventDefault();
-    if(cart !== null) {
-      fetch('/api/cart', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(selectedProduct)
-      })
-        .then(res => res.json())
-        .then(product => {
-          setCart([...cart, product])
-        })
-    }
-    navigate('/cart')
-  }
-
-  function getCartInfo() {
-    fetch('/api/cart')
-      .then(res => res.json())
-      .then(res => setCart([...cart, ...res]))
-  }
-  
-  useEffect(getCartInfo, [])
-
-  function buyProducts(event) {
-    event.preventDefault();
-    if(purchases !== null) {
-      fetch('/api/purchases', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(cart)
-      })
-        .then(res => res.json())
-        .then(product => {
-          setPurchases([...purchases, product])
-        })
-    }
-    navigate('/purchases')
-  }
-
-  function getPurchasesInfo() {
-    fetch('/api/purchases')
-      .then(res => res.json())
-      .then(res => setPurchases([...purchases, ...res]))
-  }
-
-  useEffect(getPurchasesInfo, [])
-
-  async function deleteFromCart(event) {
-    event.preventDefault();
-    const productArray = event.target.id.split('-')
-    const productObj = {
-      item_id: productArray[3],
-    }
-    const response = await fetch(`/api/cart/${productObj.item_id}`, {
-      method: 'DELETE'
-    })
-    response.then(() => {
-      const newCart = cart.filter((product) => product.id !== productObj.item_id)
-      setCart(newCart)
-    });
-  }
-
-  function selectedProductEdit(event) {
-    event.preventDefault();
-    const productArray = event.target.id.split('-')
-    console.log(event.target)
-    const productObj = {
-      item: productArray[0],
-      price: productArray[1],
-      description: productArray[2],
-      item_id: productArray[3],
-      image: productArray[4]  
-    }
-    console.log(selectedProduct)
-    setSelectedProduct(productObj)
-    navigate('/product-edit')
-  }
-
-  function editProduct(event) {
-    event.preventDefault();
-    console.log(selectedProduct)
-    console.log('clicked')
-    if(selectedProduct !== null) {
-      fetch('/api/edit', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(selectedProduct),
-      })
-        .then(res => res.json())
-        .then(product => {
-          console.log('yes')
-          // setSelectedProduct(product)
-        })
-    }
-    // navigate('/sales')
-  }
-
-
-  function deleteFromSales(event) {
-    event.preventDefault();
-    const productArray = event.target.id.split('-')
-    const productObj = {
-      item_id: productArray[3],
-    }
-    console.log(productObj)
-    fetch(`/api/sales/${productObj.item_id}`, {
-      method: 'DELETE'
-    }).then(() => {
-      const newList= products.filter((product) => product.id !== productObj.item_id)
-      setProducts(newList)
-    });
-    navigate('/sales')
-  }
-
-  function submitSignUp(event) {
-    event.preventDefault();
-    if(user !== null) {
-      fetch('/api/users', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(user)
-      })
-        .then(res => res.json())
-        .then(user => {
-          setUser(user)
-        })
-    }
-    navigate('/login')
-  }
-
-  function submitLogin(event) {
-    event.preventDefault();
-    console.log(login)
-    if(login !== null) {
-      fetch('/api/sessions', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(login)
-      })
-        .then(res => res.json())
-        .then(user => {
-          setLogin(user)
-        })
-    }
-    const isLoggedIn = true
-    setIsLogged(isLoggedIn)
-    navigate('/')
-  }
-
-  function logOut() {
-    fetch("/api/sessions", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(),
-    }).then((req, res) => {
-      const logout = '';
-      setLogin(logout)
-      const isLoggedIn = false
-    setIsLogged(isLoggedIn)
-    });
-  }
-  
 
   return (
     <div className="App">
       <Navbar 
         logOut={logOut}
+        loggedIn={loggedIn}
       />
-      <h1>Hi {login.userName}</h1>
+      <h1>Hi {loggedIn.userName}</h1>
        <Routes>
         <Route path='/' element={<Home 
           products={products}
-          selectedProductChange={selectedProductChange}
           login={login}
           sortPrice={sortPrice}
           sortName={sortName}
+          setSelectedProduct={setSelectedProduct}
+          loggedIn={loggedIn}
         />} />
         <Route path='/product' element={<CreateProduct 
           setCurrentProduct={setCurrentProduct}
           currentProduct={currentProduct}
-          addProduct={addProduct}
           products={products}
           login={login}
+          user={user}
+          setProducts={setProducts}
+          loggedIn={loggedIn}
         />} />
         <Route path='/product-info' element={<ProductInfo 
           selectedProduct={selectedProduct}
-          addToCart={addToCart}
+          cart={cart}
+          setCart={setCart}
+          loggedIn={loggedIn}
         />} />
         <Route path='/cart' element={<Cart 
           cart={cart}
-          buyProducts={buyProducts}
-          deleteFromCart={deleteFromCart}
+          purchases={purchases}
+          setPurchases={setPurchases}
+          setCart={setCart}
         />} />
         <Route path='/purchases' element={<Purchases 
           purchases={purchases}
+          loggedIn={loggedIn}
         />} />
         <Route path='/sales' element={<Sales 
-          selectedProductEdit={selectedProductEdit}
           products={products}
-          deleteFromSales={deleteFromSales}
+          setSelectedProduct={setSelectedProduct}
+          cart={cart}
+          setProducts={setProducts}
+          setCart={setCart}
+          loggedIn={loggedIn}
         />} />
         <Route path='/product-edit' element={<Edit 
           selectedProduct={selectedProduct}
-          editProduct={editProduct}
           setSelectedProduct={setSelectedProduct}
+          products={products}
+          setProducts={setProducts}
         />} />
 
       <Route path='/signup' element=    {<SignUp 
         user={user}
         setUser={setUser}
-        submitSignUp={submitSignUp}
         />} />  
         <Route path='/login' element=    {<Login 
           login={login}
           setLogin={setLogin}
-          submitLogin={submitLogin}
+          setLoggedIn={setLoggedIn}
+          loggedIn={loggedIn}
+          setIsLogged={setIsLogged}
+          isLogged={isLogged}
         />} />
       </Routes>
 

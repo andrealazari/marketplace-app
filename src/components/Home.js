@@ -1,9 +1,26 @@
 import {Typography, Button, CardActions, Card, Grid, CardMedia } from "@mui/material";
 import { Container } from "@mui/system";
-import {Routes, Route, Link} from 'react-router-dom'
+import {Routes, Route, Link, useNavigate} from 'react-router-dom'
 
-function Home({ products, selectedProductChange, sortPrice, sortName}) {
-  const productList = products.map((product, index) => 
+function Home({ products, selectedProductChange, sortPrice, sortName, setSelectedProduct, loggedIn, isLogged}) {
+  const navigate = useNavigate()
+  
+  function selectedProductChange(event) {
+    event.preventDefault();
+    const productArray = event.target.id.split('|')
+   
+    const productObj = {
+      item: productArray[0],
+      price: productArray[1],
+      description: productArray[2],
+      item_id: productArray[3],
+      image: productArray[4]  
+    }
+    setSelectedProduct(productObj)
+    navigate('/product-info')
+  }
+
+  let productList =  products.filter(p => p.userid != loggedIn.userId).map((product, index) => 
     <>
       <Grid item xs={12} sm={6} md={4} key={index}>
         <Card sx={{p: 2}}>
@@ -16,9 +33,6 @@ function Home({ products, selectedProductChange, sortPrice, sortName}) {
           <Typography component='h2' variant='h5' sx={{p: 1}}>
               ${product.price}
           </Typography>
-          {/* <Typography component='p' variant='p' fontSize={12}>
-              {product.description}
-          </Typography> */}
           <CardActions sx={{p: 2}} >
             <Link to='/product-info' style={{ textDecoration: 'none' }}>
               <Button
@@ -28,7 +42,7 @@ function Home({ products, selectedProductChange, sortPrice, sortName}) {
                 variant="contained"
                 size='small'
                 onClick={selectedProductChange}
-                id={product.item + '-' + product.price + '-' + product.description + '-' + product.id + '-' + product.image}
+                id={product.item + '|' + product.price + '|' + product.description + '|' + product.id + '|' + product.image}
                 >
                 More Info
               </Button>
@@ -43,7 +57,7 @@ function Home({ products, selectedProductChange, sortPrice, sortName}) {
     <>
      <Container maxWidth='sm'>
         <Typography component='h1' variant='h2'>
-          Products
+          Products Avaliable
         </Typography>
       </Container>
       <Container>
@@ -51,13 +65,13 @@ function Home({ products, selectedProductChange, sortPrice, sortName}) {
           variant="contained"
           size='small'
           sx={{m: 3}}
-          onClick={products.sort(sortName)}
+
         >Sort By Name</Button>
         <Button
           variant="contained"
           size='small'
           sx={{m: 3}}
-          onClick={products.sort(sortPrice)}
+
         >Sort By Price</Button>
       </Container>
       <Container maxWidth='md'>

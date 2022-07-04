@@ -1,9 +1,49 @@
 import { Box, Typography, TextField, Button, CardMedia, CardActions, Card, Grid } from "@mui/material";
 import { Container } from "@mui/system";
-import {Routes, Route, Link} from 'react-router-dom'
+import {Routes, Route, Link, useNavigate} from 'react-router-dom'
 
-function Sales({products, selectedProductEdit, deleteFromSales}) {
-  const productList = products.map((product, index) => 
+function Sales({products, selectedProductEdit, deleteFromSales, setSelectedProduct, cart, setProducts, setCart, loggedIn}) {
+
+  const navigate = useNavigate()
+
+  function selectedProductEdit(event) {
+    event.preventDefault();
+    const productArray = event.target.id.split('|')
+ 
+    const productObj = {
+      item: productArray[0],
+      price: productArray[1],
+      description: productArray[2],
+      id: productArray[3],
+      image: productArray[4]  
+    }
+   
+    setSelectedProduct(productObj)
+    navigate('/product-edit')
+  }
+
+  function deleteFromSales(event) {
+    event.preventDefault();
+    const productArray = event.target.id.split('|')
+    const productObj = {
+      item_id: productArray[3],
+    } 
+    fetch(`/api/sales/${productObj.item_id}`, {
+      method: 'DELETE'
+    }).then(() => {
+      const newList = products.filter((product) => product.id != productObj.item_id)
+      setProducts(newList)
+    })
+    fetch(`/api/carts/${productObj.item_id}`, {
+      method: 'DELETE'
+    }).then(() => {
+      const newCart = cart.filter((product) => product.item_id != productObj.item_id)
+      setCart(newCart)
+    })
+    navigate('/sales')
+  }
+ 
+  const productList = products.filter(p => p.userid == loggedIn.userId).map((product, index) => 
   <>
   <Grid item xs={12} sm={6} md={4} key={index}>
     <Card sx={{p: 2}}>
@@ -25,7 +65,7 @@ function Sales({products, selectedProductEdit, deleteFromSales}) {
               variant="contained"
               size='small'
               onClick={selectedProductEdit}
-              id={product.item + '-' + product.price + '-' + product.description + '-' + product.id + '-' + product.image}
+              id={product.item + '|' + product.price + '|' + product.description + '|' + product.id + '|' + product.image}
               sx={{m: 2}}
               >
               Edit
