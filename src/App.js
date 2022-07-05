@@ -29,6 +29,7 @@ function App() {
   const [login, setLogin] = useState('')
   const [loggedIn, setLoggedIn] = useState({})
   const [isLogged, setIsLogged] = useState(false)
+  const [deleteCart, setDeleteCart] = useState([])
 
   function getProducts() {
     fetch('/api/products')
@@ -111,6 +112,8 @@ function App() {
           loggedIn={loggedIn}
           setProducts={setProducts}
           products={products}
+          deleteCart={deleteCart}
+          setDeleteCart={setDeleteCart}
         />} />
         <Route path='/cart' element={<Cart 
           cart={cart}
@@ -120,6 +123,8 @@ function App() {
           products={products}
           setProducts={setProducts}
           loggedIn={loggedIn}
+          deleteCart={deleteCart}
+          setDeleteCart={setDeleteCart}
         />} />
         <Route path='/purchases' element={<Purchases 
           purchases={purchases}

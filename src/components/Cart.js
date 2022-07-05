@@ -1,7 +1,7 @@
 import { Box, Typography, CardMedia, Button, CardContent, CardActions, Card, Grid, Container } from "@mui/material";
 import {Link, useNavigate} from 'react-router-dom'
 
-function Cart({cart, buyProducts, deleteFromCart, setCart, purchases, setPurchases, products, setProducts, loggedIn}) {
+function Cart({cart, buyProducts, deleteFromCart, setCart, purchases, setPurchases, products, setProducts, loggedIn,deleteCart, setDeleteCart}) {
 
   const navigate = useNavigate()
 
@@ -51,6 +51,10 @@ function Cart({cart, buyProducts, deleteFromCart, setCart, purchases, setPurchas
       .then(() => {
       const newCart = cart.filter((product) => product.item_id != productObj.item_id)
       setCart(newCart)
+      let newItem = deleteCart.filter(p => p.id == productObj.item_id)
+      console.log(newItem)
+      setProducts([...products, ...newItem])
+      console.log(products)
     });
   }
   
