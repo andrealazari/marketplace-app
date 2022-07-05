@@ -79,7 +79,7 @@ function Home({ products, selectedProductChange, setSelectedProduct, loggedIn}) 
     message = <>
     <Container maxWidth='sm' margintop={5} sx={{mt: 3, mb: 8}}>
       <Typography component='h1' variant='h2'>
-        Products Avaliable
+        Products Available
       </Typography>
     </Container>
     <Container maxWidth='md'>
@@ -95,7 +95,7 @@ function Home({ products, selectedProductChange, setSelectedProduct, loggedIn}) 
         Please Login/SignUp!
       </Typography>
       <Typography component='h1' variant='h2' sx={{mt: 3, mb:8}}>
-        Products Avaliable
+        Products Available
       </Typography>
     </Container>
     <Container maxWidth='md'>

@@ -4,9 +4,9 @@ import {Routes, Route, Link, useNavigate} from 'react-router-dom'
 function Purchases({purchases, loggedIn}) {
   const productList = purchases.filter(p => p.userid != loggedIn.userId).map((product, index) => 
    <>
-    <Container maxWidth='md' key={index}>
-      <Grid container spacing={4}>
-        <Grid item xs={12} sm={6} md={4} >
+    {/* <Container maxWidth='md' key={index}>
+      <Grid container spacing={4}> */}
+        <Grid item xs={12} sm={6} md={4} key={index}>
           <Card sx={{p: 2}}>
           <Typography component='h2' variant='h5' sx={{p: 2}}>
               {product.item}
@@ -22,8 +22,8 @@ function Purchases({purchases, loggedIn}) {
           </Typography>
         </Card>    
       </Grid>
-    </Grid>
-   </Container>
+    {/* </Grid>
+   </Container> */}
  </>
 )
   return(
@@ -33,11 +33,11 @@ function Purchases({purchases, loggedIn}) {
           My Purchases
         </Typography>
       </Container>
-      {/* <Container maxWidth='md' >
-        <Grid container spacing={4}> */}
+      <Container maxWidth='md' >
+        <Grid container spacing={4}>
           {productList}
-        {/* </Grid>
-      </Container> */}
+        </Grid>
+      </Container>
     </>
   )
 }

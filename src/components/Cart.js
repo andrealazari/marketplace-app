@@ -1,7 +1,7 @@
 import { Box, Typography, CardMedia, Button, CardContent, CardActions, Card, Grid, Container } from "@mui/material";
 import {Link, useNavigate} from 'react-router-dom'
 
-function Cart({cart, buyProducts, deleteFromCart, setCart, purchases, setPurchases, products, setProducts}) {
+function Cart({cart, buyProducts, deleteFromCart, setCart, purchases, setPurchases, products, setProducts, loggedIn}) {
 
   const navigate = useNavigate()
 
@@ -11,21 +11,22 @@ function Cart({cart, buyProducts, deleteFromCart, setCart, purchases, setPurchas
     const productObj = {
       item_id: productArray[3],
     }
+    let newList = products
     fetch('/api/purchases', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(cart)
     })
+    
       .then(res => res.json())
       .then(product => {
-        
         setPurchases([...purchases, ...product])
         product.forEach(p => {
-          fetch(`/api/sales/${p.item_id}`, {
+          fetch(`/api/products/${p.item_id}`, {
             method: 'DELETE'
           }).then(() => {
-            const newList = products.filter(pr => pr.id != p.item_id)
-            setProducts([...newList])
+            newList = newList.filter(pr => pr.id != p.item_id)
+             setProducts([...newList])
           })
           fetch(`/api/cart/${p.item_id}`, {
             method: 'DELETE'
@@ -34,7 +35,6 @@ function Cart({cart, buyProducts, deleteFromCart, setCart, purchases, setPurchas
             setCart([])
           navigate('/purchases')
         })
-        
       })
   })
 }
@@ -45,13 +45,11 @@ function Cart({cart, buyProducts, deleteFromCart, setCart, purchases, setPurchas
     const productObj = {
       item_id: productArray[3],
     }
-    console.log(productArray)
-    console.log(products)
     fetch(`/api/cart/${productObj.item_id}`, {
       method: 'DELETE'
     })
       .then(() => {
-      const newCart = cart.filter((product) => product.id != productObj.item_id)
+      const newCart = cart.filter((product) => product.item_id != productObj.item_id)
       setCart(newCart)
     });
   }
@@ -61,7 +59,7 @@ function Cart({cart, buyProducts, deleteFromCart, setCart, purchases, setPurchas
   if(cart !== '') {
     price = cart.reduce((total, product) => total + Number(product.price), 0)
 
-    productList = cart.map((product, index) => 
+    productList = cart.filter(p => p.userid != loggedIn.userId).map((product, index) => 
     <Card key={index} sx={{m: 1}}>
       <Box display='flex'> 
         {/* <CardMedia 
@@ -72,7 +70,7 @@ function Cart({cart, buyProducts, deleteFromCart, setCart, purchases, setPurchas
           variant="contained"
           size='small'
           onClick={deleteFromCart}
-          id={product.item + '|' + product.price + '|' + product.description + '|' + product.id + '|' + product.image}
+          id={product.item + '|' + product.price + '|' + product.description + '|' + product.item_id + '|' + product.image}
           >
           Delete From Cart
         </Button>

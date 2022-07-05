@@ -119,6 +119,7 @@ function App() {
           setCart={setCart}
           products={products}
           setProducts={setProducts}
+          loggedIn={loggedIn}
         />} />
         <Route path='/purchases' element={<Purchases 
           purchases={purchases}
