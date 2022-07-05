@@ -2,7 +2,7 @@ import {Typography, Button, CardActions, Card, Grid, CardMedia } from "@mui/mate
 import { Container } from "@mui/system";
 import {Routes, Route, Link, useNavigate} from 'react-router-dom'
 
-function Home({ products, selectedProductChange, sortPrice, sortName, setSelectedProduct, loggedIn}) {
+function Home({ products, selectedProductChange, setSelectedProduct, loggedIn}) {
   const navigate = useNavigate()
   
   function selectedProductChange(event) {
@@ -14,7 +14,10 @@ function Home({ products, selectedProductChange, sortPrice, sortName, setSelecte
       price: productArray[1],
       description: productArray[2],
       item_id: productArray[3],
-      image: productArray[4]  
+      image: productArray[4] ,
+      avatar: productArray[5],
+      userName: productArray[6],
+      userid: productArray[7] 
     }
     setSelectedProduct(productObj)
     navigate('/product-info')
@@ -42,7 +45,7 @@ function Home({ products, selectedProductChange, sortPrice, sortName, setSelecte
                 variant="contained"
                 size='small'
                 onClick={selectedProductChange}
-                id={product.item + '|' + product.price + '|' + product.description + '|' + product.id + '|' + product.image}
+                id={product.item + '|' + product.price + '|' + product.description + '|' + product.id + '|' + product.image + '|' + product.avatar  + '|' + product.username  + '|' + product.userid}
                 >
                 More Info
               </Button>
@@ -74,27 +77,10 @@ function Home({ products, selectedProductChange, sortPrice, sortName, setSelecte
   let message
   if(loggedIn.userId > 0) {
     message = <>
-    <Container maxWidth='sm' marginTop={5} sx={{mt: 3}}>
-      <Typography component='h5' variant='h5'>
-        Hi {loggedIn.userName}!
-      </Typography>
+    <Container maxWidth='sm' margintop={5} sx={{mt: 3, mb: 8}}>
       <Typography component='h1' variant='h2'>
         Products Avaliable
       </Typography>
-    </Container>
-    <Container>
-      <Button
-        variant="contained"
-        size='small'
-        sx={{m: 3}}
-
-      >Sort By Name</Button>
-      <Button
-        variant="contained"
-        size='small'
-        sx={{m: 3}}
-        onClick={sortPrice}
-      >Sort By Price</Button>
     </Container>
     <Container maxWidth='md'>
       <Grid container spacing={4}>
@@ -108,23 +94,9 @@ function Home({ products, selectedProductChange, sortPrice, sortName, setSelecte
       <Typography component='h5' variant='h5' sx={{mt: 3}}>
         Please Login/SignUp!
       </Typography>
-      <Typography component='h1' variant='h2'>
+      <Typography component='h1' variant='h2' sx={{mt: 3, mb:8}}>
         Products Avaliable
       </Typography>
-    </Container>
-    <Container>
-      <Button
-        variant="contained"
-        size='small'
-        sx={{m: 3}}
-
-      >Sort By Name</Button>
-      <Button
-        variant="contained"
-        size='small'
-        sx={{m: 3}}
-        onClick={sortPrice}
-      >Sort By Price</Button>
     </Container>
     <Container maxWidth='md'>
       <Grid container spacing={4}>
@@ -133,24 +105,6 @@ function Home({ products, selectedProductChange, sortPrice, sortName, setSelecte
     </Container>
   </>
   }
-
-  // function comparePrice(a, b) {
-  //   const priceA = a.price;
-  //   const priceB = b.price;
-  
-  //   let comparison = 0;
-  //   if (priceA > priceB) {
-  //     comparison = 1;
-  //   } else if (priceA < priceB) {
-  //     comparison = -1;
-  //   }
-  //   return comparison;
-  // }
-
-  // function sortPrice(products) {
-  //   return  products.sort(comparePrice())
-
-  // }
 
   return (
     <>

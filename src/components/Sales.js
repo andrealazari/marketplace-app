@@ -9,7 +9,6 @@ function Sales({products, selectedProductEdit, deleteFromSales, setSelectedProdu
   function selectedProductEdit(event) {
     event.preventDefault();
     const productArray = event.target.id.split('|')
- 
     const productObj = {
       item: productArray[0],
       price: productArray[1],
@@ -26,21 +25,15 @@ function Sales({products, selectedProductEdit, deleteFromSales, setSelectedProdu
     event.preventDefault();
     const productArray = event.target.id.split('|')
     const productObj = {
-      item_id: productArray[3],
+      id: productArray[3],
     } 
-    fetch(`/api/sales/${productObj.item_id}`, {
+    fetch(`/api/sales/${productObj.id}`, {
       method: 'DELETE'
     }).then(() => {
-      const newList = products.filter((product) => product.id != productObj.item_id)
+      const newList = products.filter((product) => product.id != productObj.id)
       setProducts(newList)
+      navigate('/sales')
     })
-    fetch(`/api/carts/${productObj.item_id}`, {
-      method: 'DELETE'
-    }).then(() => {
-      const newCart = cart.filter((product) => product.item_id != productObj.item_id)
-      setCart(newCart)
-    })
-    navigate('/sales')
   }
  
   const productList = products.filter(p => p.userid == loggedIn.userId).map((product, index) => 
@@ -75,11 +68,10 @@ function Sales({products, selectedProductEdit, deleteFromSales, setSelectedProdu
             variant="contained"
             size='small'
             onClick={deleteFromSales}
-            id={product.item + '-' + product.price + '-' + product.description + '-' + product.id + '-' + product.image}
+            id={product.item + '|' + product.price + '|' + product.description + '|' + product.id + '|' + product.image}
             >
             Delete
           </Button>
-          
         </CardActions>
     </Card>    
   </Grid>

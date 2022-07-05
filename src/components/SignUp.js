@@ -5,7 +5,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -13,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Card from '@mui/material/Card';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {Routes, Route, useNavigate} from 'react-router-dom'
+import {Routes, Route, useNavigate, Link} from 'react-router-dom'
 
 
 export default function SignUp({user, setUser}) {
@@ -41,7 +40,7 @@ export default function SignUp({user, setUser}) {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -66,6 +65,19 @@ export default function SignUp({user, setUser}) {
                   autoFocus
                   value={user.name}
                   onChange={event => setUser({...user, name: event.target.value })}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  autoComplete="avatar"
+                  name="avatar"
+                  required
+                  fullWidth
+                  id="avatar"
+                  label="Avatar"
+                  autoFocus
+                  value={user.avatar}
+                  onChange={event => setUser({...user, avatar: event.target.value })}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -105,7 +117,7 @@ export default function SignUp({user, setUser}) {
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link to='/login' variant="body2">
-                  Already have an account? Sign in
+                  Already have an account? Login
                 </Link>
               </Grid>
             </Grid>

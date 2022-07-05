@@ -1,24 +1,24 @@
-import { Box, Typography, Card, Button, CardContent, CardActions, Grid, Container, CardMedia } from "@mui/material";
+import { Box, Typography, Card, Button, CardContent, CardActions, Grid, Container, CardMedia, Avatar } from "@mui/material";
 import {Link, useNavigate} from 'react-router-dom'
 
-function ProductInfo({selectedProduct, addToCart, cart, setCart}) {
+function ProductInfo({selectedProduct, addToCart, cart, setCart, products, setProducts}) {
 
   const navigate = useNavigate()
   
   function addToCart(event) {
     event.preventDefault();
-    if(cart !== null) {
-      fetch('/api/cart', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(selectedProduct)
+    fetch('/api/cart', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(selectedProduct)
+    })
+      .then(res => res.json())
+      .then(product => {
+        setCart([...cart, product])
+        navigate('/cart')
       })
-        .then(res => res.json())
-        .then(product => {
-          setCart([...cart, product])
-          navigate('/cart')
-        })
-    }
+        // console.log(selectedProduct)
+        
    
   }
 
@@ -31,6 +31,18 @@ function ProductInfo({selectedProduct, addToCart, cart, setCart}) {
       </Container>
       <Container maxWidth='sm'>
         <Card sx={{p: 2}}>
+        <Typography component='h2' variant='h5' sx={{p: 2}}>
+            Seller Info
+        </Typography>
+        <Avatar alt="Remy Sharp" src={selectedProduct.avatar} sx={{mx: 'auto'}}/>
+        <Typography component='h2' variant='h5' sx={{p: 2}}>
+            {selectedProduct.userName}
+        </Typography>
+        </Card>
+        <Card sx={{p: 2, mt: 5}}>
+        <Typography component='h2' variant='h5' sx={{p: 2}}>
+            Product Info
+        </Typography>
         <Typography component='h2' variant='h5' sx={{p: 2}}>
             {selectedProduct.item}
         </Typography>

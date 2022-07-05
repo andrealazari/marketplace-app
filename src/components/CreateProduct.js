@@ -11,7 +11,7 @@ function CreateProduct({ currentProduct, setCurrentProduct, addProduct, loggedIn
     fetch('/api/products', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({...currentProduct, userid: loggedIn.userId})
+      body: JSON.stringify({...currentProduct, userid: loggedIn.userId, avatar: loggedIn.avatar, userName: loggedIn.userName})
     })
       .then(res => res.json())
       .then(product => {

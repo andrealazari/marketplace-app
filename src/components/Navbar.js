@@ -103,7 +103,7 @@ const ResponsiveAppBar = ({logOut, loggedIn}) => {
               noWrap
               component="a"
               sx={{
-                mr: 2,
+                mr: 30,
                 display: { xs: 'flex', md: 'none' },
                 flexGrow: 1,
                 fontFamily: 'monospace',
@@ -113,7 +113,7 @@ const ResponsiveAppBar = ({logOut, loggedIn}) => {
                 textDecoration: 'none',
               }}
             >
-              MarketPlace
+              MP
             </Typography></Link>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex'}}}>
                 <MenuItem onClick={handleCloseNavMenu}><Link style={{ textDecoration: 'none', color: 'white' }} to='/product'>Sell Item</Link></MenuItem>
@@ -122,11 +122,13 @@ const ResponsiveAppBar = ({logOut, loggedIn}) => {
                 <MenuItem onClick={handleCloseNavMenu}><Link style={{ textDecoration: 'none', color: 'white' }} to='/sales'>My Items to Sell</Link></MenuItem>
 
             </Box>
-
+            <Typography component='p' variant='p' sx={{fontSize: 15, pr: 1}}>
+              Hi {loggedIn.userName}!
+            </Typography>
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="" />
+                  <Avatar alt="Remy Sharp" src={loggedIn.avatar} />
                 </IconButton>
               </Tooltip>
               <Menu
@@ -145,6 +147,7 @@ const ResponsiveAppBar = ({logOut, loggedIn}) => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
+                
                 <MenuItem onClick={handleCloseUserMenu}><Link style={{ textDecoration: 'none' }} to='/' onClick={logOut}>Logout</Link></MenuItem>
               </Menu>
             </Box>
@@ -182,7 +185,7 @@ const ResponsiveAppBar = ({logOut, loggedIn}) => {
               noWrap
               component="a"
               sx={{
-                mr: 2,
+                mr: 10,
                 display: { xs: 'flex', md: 'none' },
                 flexGrow: 1,
                 fontFamily: 'monospace',

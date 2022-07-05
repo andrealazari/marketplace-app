@@ -1,7 +1,7 @@
 import { Box, Typography, CardMedia, Button, CardContent, CardActions, Card, Grid, Container } from "@mui/material";
 import {Link, useNavigate} from 'react-router-dom'
 
-function Cart({cart, buyProducts, deleteFromCart, setCart, purchases, setPurchases}) {
+function Cart({cart, buyProducts, deleteFromCart, setCart, purchases, setPurchases, products, setProducts}) {
 
   const navigate = useNavigate()
 
@@ -11,26 +11,33 @@ function Cart({cart, buyProducts, deleteFromCart, setCart, purchases, setPurchas
     const productObj = {
       item_id: productArray[3],
     }
-    if(purchases !== null) {
-      fetch('/api/purchases', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(cart)
-      })
-        .then(res => res.json())
-        .then(product => {
-          setPurchases([...purchases, product])
-        })
-    }
-    fetch(`/api/carts/${productObj.item_id}`, {
-      method: 'DELETE'
+    fetch('/api/purchases', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(cart)
     })
-      .then(() => {
-        const newCart = cart.filter((product) => product.id != productObj.item_id)
-        setCart(newCart)
-      });
-    navigate('/purchases')
-  }
+      .then(res => res.json())
+      .then(product => {
+        
+        setPurchases([...purchases, ...product])
+        product.forEach(p => {
+          fetch(`/api/sales/${p.item_id}`, {
+            method: 'DELETE'
+          }).then(() => {
+            const newList = products.filter(pr => pr.id != p.item_id)
+            setProducts([...newList])
+          })
+          fetch(`/api/cart/${p.item_id}`, {
+            method: 'DELETE'
+          }).then(() => {
+            const newCarts = cart.filter(pr => pr.id != p.item_id)
+            setCart([])
+          navigate('/purchases')
+        })
+        
+      })
+  })
+}
 
   function deleteFromCart(event) {
     event.preventDefault();
@@ -38,6 +45,8 @@ function Cart({cart, buyProducts, deleteFromCart, setCart, purchases, setPurchas
     const productObj = {
       item_id: productArray[3],
     }
+    console.log(productArray)
+    console.log(products)
     fetch(`/api/cart/${productObj.item_id}`, {
       method: 'DELETE'
     })
@@ -55,9 +64,9 @@ function Cart({cart, buyProducts, deleteFromCart, setCart, purchases, setPurchas
     productList = cart.map((product, index) => 
     <Card key={index} sx={{m: 1}}>
       <Box display='flex'> 
-        <CardMedia 
+        {/* <CardMedia 
           sx={{pt: '56%', height: 0}}
-          image={product.image}/>
+          image={product.image}/> */}
         <CardActions>
         <Button 
           variant="contained"
@@ -124,6 +133,7 @@ function Cart({cart, buyProducts, deleteFromCart, setCart, purchases, setPurchas
                 size='small'
                 onClick={buyProducts}
                 sx={{m: 2}}
+                // id={product.item + '|' + product.price + '|' + product.description + '|' + product.id + '|' + product.image}
                 >
                 Buy
               </Button>
